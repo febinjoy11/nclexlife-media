@@ -1,0 +1,106 @@
+{
+  "topic": "Pharmacology",
+  "hook_lines": [
+    "WHICH MED",
+    "DO YOU HOLD?"
+  ],
+  "question": "Which medication should the nurse **HOLD?**",
+  "options_y": 560,
+  "options": [
+    "Metoprolol: HR 74, BP 128/78",
+    "Warfarin: INR 2.5",
+    "Digoxin: apical pulse 52",
+    "Furosemide: potassium 4.1"
+  ],
+  "correct": 2,
+  "answer_banner": "",
+  "answer_sub": "DIGOXIN + PULSE UNDER 60 = HOLD",
+  "scene": "sort",
+  "sort_cols": [
+    "GIVE",
+    "HOLD"
+  ],
+  "sort_colors": [
+    [
+      30,
+      175,
+      100
+    ],
+    [
+      240,
+      110,
+      80
+    ]
+  ],
+  "sort_hl": 1,
+  "chips": [
+    "Metoprolol\nHR 74",
+    "Warfarin\nINR 2.5",
+    "Digoxin\npulse 52",
+    "Furosemide\nK 4.1"
+  ],
+  "sort_dest": [
+    0,
+    0,
+    1,
+    0
+  ],
+  "sort_why": [
+    "HR normal",
+    "in range",
+    "under 60",
+    "normal K"
+  ],
+  "explain_1": "Check the number **before** you give it.",
+  "explain_2": "Pulse under 60? **HOLD** digoxin.",
+  "principle": "Digoxin: apical pulse under **60?** HOLD it.",
+  "principle_sub": "Count the apical pulse for 1 full minute",
+  "next_tease": "Which lab is **CRITICAL?**",
+  "voice": {
+    "hook": [
+      0.05,
+      1.45,
+      "Which med do you hold?"
+    ],
+    "question": [
+      1.55,
+      1.95,
+      "Four meds. Which one do you hold?"
+    ],
+    "pick": [
+      5.9,
+      0.6,
+      "Pick one."
+    ],
+    "reveal": [
+      9.75,
+      2.0,
+      "C. Digoxin, pulse fifty-two."
+    ],
+    "exp1": [
+      12.1,
+      2.2,
+      "Check the number before you give it."
+    ],
+    "exp2": [
+      14.4,
+      2.35,
+      "Digoxin, pulse under sixty? Hold it."
+    ],
+    "mnemonic": [
+      16.9,
+      2.8,
+      "Count the apical pulse for a full minute."
+    ],
+    "engage": [
+      19.9,
+      1.55,
+      "Did you pick C?"
+    ],
+    "next": [
+      21.55,
+      1.65,
+      "Next: which lab is critical?"
+    ]
+  }
+}
