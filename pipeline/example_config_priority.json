@@ -1,0 +1,90 @@
+{
+  "topic": "Prioritization",
+  "hook_lines": [
+    "4 CLIENTS.",
+    "WHO DO YOU SEE FIRST?"
+  ],
+  "question": "Which client should the nurse assess **FIRST?**",
+  "options": [
+    "COPD, SpO\u2082 90% on 2 L oxygen",
+    "Peanut allergy, says throat feels tight",
+    "Post-op day 1, pain 5/10",
+    "Type 2 diabetes, glucose 190 mg/dL"
+  ],
+  "correct": 1,
+  "answer_banner": "",
+  "answer_sub": "THROAT TIGHTNESS = AIRWAY RISK",
+  "scene": "priority",
+  "chips": [
+    "COPD\nSpO\u2082 90%",
+    "Peanut allergy\nthroat tight",
+    "Post-op\npain 5/10",
+    "Diabetes\nglucose 190"
+  ],
+  "scene_label": "POSSIBLE ANAPHYLAXIS",
+  "scene_tag": "AIRWAY",
+  "explain_1": "Step 1: cross out what's **expected**.",
+  "explain_2": "A tight throat can mean the **airway** is closing.",
+  "mnemonic": {
+    "letters": [
+      "A",
+      "B",
+      "C"
+    ],
+    "words": [
+      "Airway",
+      "Breathing",
+      "Circulation"
+    ],
+    "tag": "AIRWAY FIRST"
+  },
+  "next_tease": "Can the RN **delegate** this?",
+  "voice": {
+    "hook": [
+      0.05,
+      1.45,
+      "Four clients. Who's first?"
+    ],
+    "question": [
+      1.55,
+      1.95,
+      "Which client do you assess first?"
+    ],
+    "pick": [
+      5.9,
+      0.6,
+      "Pick one."
+    ],
+    "reveal": [
+      9.75,
+      2.0,
+      "B. The tight throat."
+    ],
+    "exp1": [
+      12.1,
+      2.2,
+      "Cross out what's expected."
+    ],
+    "exp2": [
+      14.4,
+      2.35,
+      "A tight throat can mean anaphylaxis."
+    ],
+    "mnemonic": [
+      16.9,
+      2.8,
+      "A, B, C. Airway comes first."
+    ],
+    "engage": [
+      19.9,
+      1.55,
+      "Did you pick B?"
+    ],
+    "next": [
+      21.55,
+      1.65,
+      "Next: can you delegate this?"
+    ]
+  },
+  "options_y": 560
+}
