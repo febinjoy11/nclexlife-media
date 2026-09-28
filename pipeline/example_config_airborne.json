@@ -1,0 +1,81 @@
+{
+  "topic": "Infection control",
+  "hook_lines": [
+    "TB PATIENT.",
+    "WHICH PRECAUTION?"
+  ],
+  "question": "A client has suspected **TUBERCULOSIS**. Which precaution should the nurse use?",
+  "options": [
+    "Standard precautions",
+    "Droplet + surgical mask",
+    "Airborne: N95 + negative-pressure room",
+    "Contact + gown and gloves"
+  ],
+  "correct": 2,
+  "answer_banner": "AIRBORNE PRECAUTIONS",
+  "answer_sub": "N95 + NEGATIVE-PRESSURE ROOM",
+  "scene": "airborne",
+  "explain_1": "TB spreads through tiny **airborne particles**.",
+  "explain_2": "Use an **N95** + **airborne isolation**.",
+  "mnemonic": {
+    "letters": [
+      "M",
+      "T",
+      "V"
+    ],
+    "words": [
+      "Measles",
+      "Tuberculosis",
+      "Varicella"
+    ],
+    "tag": "= AIRBORNE"
+  },
+  "next_tease": "Which patient should you assess **FIRST?**",
+  "voice": {
+    "hook": [
+      0.05,
+      1.4,
+      "TB patient. Which precaution?"
+    ],
+    "question": [
+      1.62,
+      2.85,
+      "Suspected tuberculosis. Which precaution should the nurse use?"
+    ],
+    "pick": [
+      5.9,
+      0.6,
+      "Pick one."
+    ],
+    "reveal": [
+      9.75,
+      2.1,
+      "C. Airborne. N95 and negative pressure."
+    ],
+    "exp1": [
+      12.15,
+      2.2,
+      "TB spreads through tiny airborne particles."
+    ],
+    "exp2": [
+      14.4,
+      2.3,
+      "Use an N95 and airborne isolation."
+    ],
+    "mnemonic": [
+      16.9,
+      2.8,
+      "M T V. Measles. T B. Varicella. All airborne."
+    ],
+    "engage": [
+      19.9,
+      1.5,
+      "Did you pick C? Comment below."
+    ],
+    "next": [
+      21.5,
+      1.7,
+      "Next: who do you assess first?"
+    ]
+  }
+}
