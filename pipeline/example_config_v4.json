@@ -1,0 +1,97 @@
+{
+ "topic": "Med-surg",
+ "hook_lines": [
+  "4 LABS.",
+  "WHICH IS CRITICAL?"
+ ],
+ "question": "Which lab do you report **NOW?**",
+ "options_y": 520,
+ "options": [
+  "Sodium 134 mEq/L",
+  "Glucose 180 mg/dL (diabetic)",
+  "WBC 11,500, post-op day 1",
+  "Potassium 6.8 mEq/L"
+ ],
+ "correct": 3,
+ "answer_banner": "",
+ "answer_sub": "POTASSIUM 6.8 = REPORT NOW",
+ "scene": "sort",
+ "sort_cols": [
+  "MONITOR",
+  "REPORT NOW"
+ ],
+ "sort_colors": [
+  [
+   127,
+   224,
+   207
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Sodium\n134",
+  "Glucose 180\n(diabetic)",
+  "WBC 11,500\npost-op",
+  "Potassium\n6.8"
+ ],
+ "sort_dest": [
+  0,
+  0,
+  0,
+  1
+ ],
+ "sort_why": [
+  "mildly low",
+  "expected",
+  "expected",
+  "critical"
+ ],
+ "explain_1": "Mild changes can wait. **Potassium** can't.",
+ "explain_2": "Over 6 risks deadly **arrhythmias**.",
+ "next_tease": "Which postpartum finding is **URGENT?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.4,
+   "Four labs. Which one do you report right now?"
+  ],
+  "reveal": [
+   6.75,
+   1.8,
+   "D. Potassium, six point eight."
+  ],
+  "exp1": [
+   8.8,
+   1.8,
+   "Mild changes can wait."
+  ],
+  "exp2": [
+   10.7,
+   1.8,
+   "This potassium can stop the heart."
+  ],
+  "mnemonic": [
+   12.7,
+   2.6,
+   "Normal is three point five to five."
+  ],
+  "engage": [
+   15.5,
+   1.2,
+   "Did you pick D?"
+  ],
+  "next": [
+   16.8,
+   1.6,
+   "Next: after birth."
+  ]
+ },
+ "principle": "Potassium 6.8? That can stop the **heart.**",
+ "principle_sub": "Normal potassium: 3.5 to 5.0 mEq/L",
+ "series_no": 10
+}
