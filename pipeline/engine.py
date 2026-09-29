@@ -19,7 +19,8 @@ WHITE = (255, 255, 255); GREEN = (30, 175, 100); CARD = (21, 76, 86); DIM = (18,
 CORAL = (240, 110, 80); YELLOW = (255, 204, 77); SKIN = (236, 214, 196)
 
 # ---------- fixed retention timeline (seconds) ----------
-T = dict(Q=1.40, OPT=3.50, GAP=0.45, PICK=5.90, CD=6.40, REV=9.40, EXP=11.80, MN=16.80, EN=19.80, END=23.30)
+T = dict(Q=0.00, OPT=-0.25, GAP=0.20, PICK=3.60, CD=4.00, REV=6.40, EXP=8.60, MN=12.60, EN=15.40, END=18.60)
+CDD = (T['REV'] - T['CD']) / 3
 
 _fc = {}
 def font(size):
@@ -291,7 +292,7 @@ def scene_sort(d, t, C):
     slots = {0: 0, 1: 0}
     for i, (lab, dest, why) in enumerate(zip(C['chips'], C['sort_dest'], C['sort_why'])):
         k = slots[dest]; slots[dest] += 1
-        ts = .25 + i * .85; ap = eo(prog(u, ts, .25)); mv = eio(prog(u, ts + .35, .45))
+        ts = .2 + i * .7; ap = eo(prog(u, ts, .22)); mv = eio(prog(u, ts + .3, .4))
         if ap <= 0: continue
         w, h = 440, 180
         sx, sy = 540 - w / 2, 1180
@@ -334,8 +335,9 @@ def mnemonic(d, t, C):
     if a > 0:
         f = font(96 * sc); tw = f.getlength(m['tag'])
         shake = 6 * math.sin(u * 90) * (1 - prog(u, 2.0, .25))
-        d.rounded_rectangle((540 - tw / 2 - 40 + shake, 1230 - 70 * sc, 540 + tw / 2 + 40 + shake, 1230 + 70 * sc), radius=int(30 * sc), fill=mix(BG, AQUA, a * A))
-        d.text((540 + shake, 1230), m['tag'], font=f, fill=mix(BG, DARK, a * A), anchor='mm')
+        ty = max(1230, 560 + n * 200 + 60)
+        d.rounded_rectangle((540 - tw / 2 - 40 + shake, ty - 70 * sc, 540 + tw / 2 + 40 + shake, ty + 70 * sc), radius=int(30 * sc), fill=mix(BG, AQUA, a * A))
+        d.text((540 + shake, ty), m['tag'], font=f, fill=mix(BG, DARK, a * A), anchor='mm')
 
 # ---------- engage + next tease ----------
 def engage(d, t, C):
@@ -345,9 +347,12 @@ def engage(d, t, C):
     kinetic(d, lay(words, f, 60, 480, 960, 130, center=True), f, t, T['EN'] + .05, stag=.08, a=A, hl=GREEN, hltxt=WHITE, glow=False)
     p = eo(prog(u, .9, .3))
     if p > 0:
-        ctext(d, 'Comment your answer', 540, 760 + (1 - p) * 30, 62, LIGHT, p * A)
-        by = 850 + 12 * abs(math.sin(u * 5))
-        d.polygon([(510, by), (570, by), (540, by + 34)], fill=mix(BG, AQUA, p * A))
+        y0 = 720 + (1 - p) * 30; pulse = 1 + .03 * math.sin(u * 7)
+        w = 760 * pulse; h = 130 * pulse
+        d.rounded_rectangle((540 - w / 2, y0, 540 + w / 2, y0 + h), radius=int(65 * pulse), fill=mix(BG, AQUA, p * A))
+        px, py = 540 - w / 2 + 80, y0 + h / 2
+        d.polygon([(px - 34, py - 4), (px + 34, py - 30), (px + 10, py + 32), (px, py + 8)], fill=mix(BG, DARK, p * A))
+        d.text((px + 70, py), 'SEND to a study buddy', font=font(52), fill=mix(BG, DARK, p * A), anchor='lm')
     p = eo(prog(u, 1.65, .3))
     if p > 0:
         x = 70 - (1 - p) * 300
@@ -356,8 +361,31 @@ def engage(d, t, C):
         f2 = font(70)
         kinetic(d, lay(parse(C['next_tease']), f2, 70, 1110, 920, 86), f2, t, T['EN'] + 1.8, stag=.06, a=A, hl=CORAL, hltxt=WHITE)
 
+
+def captions(d, t, C, work):
+    try: lens = json.load(open(os.path.join(work, 'voice_lens.json')))
+    except Exception: return
+    for key, (at, win, text) in C['voice'].items():
+        L = lens.get(key, win)
+        if not (at <= t < at + L + .25): continue
+        words = text.split(); n = len(words)
+        i = min(n - 1, int((t - at) / max(L, .1) * n))
+        chunks, cur = [], []
+        for k, w in enumerate(words):
+            cur.append(k)
+            if len(cur) == 4 or w[-1] in '.?!,:': chunks.append(cur); cur = []
+        if cur: chunks.append(cur)
+        idx = next(c for c in chunks if i in c); start = idx[0]; chunk = [words[k] for k in idx]
+        f = font(54); sp = f.getlength(' ')
+        tw = sum(f.getlength(w) for w in chunk) + sp * (len(chunk) - 1)
+        x = 540 - tw / 2; y = 1605
+        d.rounded_rectangle((x - 26, y - 44, x + tw + 26, y + 44), radius=22, fill=DARK)
+        for j, w in enumerate(chunk):
+            cur = start + j == i
+            d.text((x, y), w, font=f, fill=YELLOW if cur else WHITE, anchor='lm'); x += f.getlength(w) + sp
+
 # ---------- frame ----------
-def frame(t, C):
+def frame(t, C, work=None):
     OY = C.get('options_y', CY0); PY = OY + 3 * CGAP + 180
     dark = eo(prog(t, T['CD'] - .3, .4)) * (1 - eo(prog(t, T['REV'], .3)))
     im, d = background(t, dark)
@@ -368,11 +396,11 @@ def frame(t, C):
     loop = eio(prog(t, T['END'] - .45, .45))
 
     # HOOK
-    if t < T['Q'] + .25:
-        out = eio(prog(t, T['Q'] - .1, .3))
+    if False:
+        out = 0
         for i, line in enumerate(C['hook_lines']):
             hs = min(150 if i == 0 else 120, 130 * 930 / font(130).getlength(line))
-            sc, a = punch(t, .03 + i * .38, .22, 1.25)
+            sc, a = punch(t, -.3 + i * .45, .22, 1.25)  # line 1 fully visible on frame 0 (scroll-stopping first frame)
             y = 800 + i * 150 - out * 300
             ctext(d, line, 540, y, hs * (1 - .3 * out), WHITE if i == 0 else AQUA, a * (1 - out), sc)
             if i == len(C['hook_lines']) - 1:
@@ -382,17 +410,17 @@ def frame(t, C):
     if T['Q'] <= t < T['EXP'] + .1:
         out = eio(prog(t, T['EXP'] - .35, .35))
         fq = font(66)
-        kinetic(d, lay(parse(C['question']), fq, 70, 250, 930, 80), fq, t, T['Q'] + .05, stag=.045, a=1 - out, dy=-out * 150)
+        kinetic(d, lay(parse(C['question']), fq, 70, 250, 930, 80), fq, t, T['Q'] - 1.0, stag=.0, a=1 - out, dy=-out * 150)
     # OPTIONS
     if T['OPT'] <= t < T['EXP'] + .1:
         out = eio(prog(t, T['EXP'] - .35, .35))
-        zoom = 1 + .035 * eo(prog(t, T['CD'], 1.0)) * (1 - eo(prog(t, T['REV'], .2)))
+        zoom = 1 + .035 * eo(prog(t, T['CD'], .6)) * (1 - eo(prog(t, T['REV'], .2)))
         rev = prog(t, T['REV'], .3); win = eo(prog(t, T['REV'] + .2, .35))
         for i, opt in enumerate(C['options']):
             ts = T['OPT'] + i * T['GAP']
             if t < ts: continue
             p = back(prog(t, ts, .35), 1.2) if t < ts + .35 else 1
-            cx = CX + (1 - p) * 600 + out * (-900 if i % 2 else 900)
+            cx = CX + (1 - p) * 350 + out * (-900 if i % 2 else 900)
             cy = OY + i * CGAP + 2.5 * math.sin(t * 2.2 + i * 1.7) * prog(t, T['OPT'] + 2, .5)
             cy = (OY + 1.5 * CGAP) + (cy - (OY + 1.5 * CGAP)) * zoom
             ok = i == C['correct']
@@ -423,7 +451,7 @@ def frame(t, C):
         d.text((540, PY), 'PICK ONE', font=f, fill=mix(BG, DARK, a), anchor='mm')
     if T['CD'] <= t < T['REV'] + .3:
         a = eo(prog(t, T['CD'], .2)) * (1 - prog(t, T['REV'], .25))
-        el = t - T['CD']; n = 3 - min(2, int(el)); fr = el % 1
+        el = (t - T['CD']) / CDD; n = 3 - min(2, int(el)); fr = el % 1
         pulse = 1 + .12 * (1 - eo(clamp(fr * 4)))
         r = 92 * pulse; cx, cy = 540, PY + 165
         d.ellipse((cx - r, cy - r, cx + r, cy + r), outline=mix(BG, AQUA, .25 * a), width=14)
@@ -444,6 +472,16 @@ def frame(t, C):
         {'airborne': scene_airborne, 'priority': scene_priority, 'sort': scene_sort}.get(C.get('scene'), scene_flow)(d, t, C)
     if T['MN'] <= t < T['EN'] + .05: mnemonic(d, t, C)
     if t >= T['EN']: engage(d, t, C)
+    # 2) series badge
+    if C.get('series_no'):
+        lab = f"DAILY #{C['series_no']}"; f = font(30); w = f.getlength(lab) + 40
+        chipw = font(30).getlength(f"NCLEX  ·  {C['topic'].upper()}") + 56
+        d.rounded_rectangle((70 + chipw, 60, 70 + chipw + w, 112), radius=26, fill=YELLOW); d.text((70 + chipw + w / 2, 86), lab, font=f, fill=DARK, anchor='mm')
+    # 3) comment-before-reveal prompt during countdown
+    if T['CD'] <= t < T['REV']:
+        a = eo(prog(t, T['CD'] + .2, .3)) * (1 - prog(t, T['REV'] - .2, .2))
+        ctext(d, 'Comment your answer before the reveal', 540, 1610, 42, LIGHT, a)
+    if work: captions(d, t, C, work)
     return im
 
 # ---------- audio ----------
@@ -474,6 +512,7 @@ def prep(C, work):
     from kokoro_onnx import Kokoro
     os.makedirs(work, exist_ok=True)
     k = Kokoro(os.environ.get('KOKORO_MODEL', 'kokoro16.onnx'), os.environ.get('KOKORO_VOICES', 'voices.bin'))
+    lens = {}
     out = np.zeros(int(SR * (T['END'] + .3)))
     def put(x, at, g=1.0):
         i = int(at * SR); j = min(len(out), i + len(x)); out[i:j] += g * x[:j - i]
@@ -481,7 +520,7 @@ def prep(C, work):
         a, sr = k.create(text, voice=C.get('voice_name', 'am_michael'), speed=C.get('voice_speed', 1.18), lang='en-us')
         raw = os.path.join(work, f'raw_{key}.wav'); fit = os.path.join(work, f'v_{key}.wav')
         sf.write(raw, a, sr); L = fit_voice(raw, fit, win)
-        v, _ = sf.read(fit); put(v, at, 1.0)
+        v, _ = sf.read(fit); put(v, at, 1.0); lens[key] = L
         print(key, 'len', round(L, 2), 'window', win, 'OVER' if L > win + .15 else '')
     tt = np.arange(len(out)) / SR
     pad = .03 * (np.sin(2 * np.pi * 110 * tt) + .5 * np.sin(2 * np.pi * 165 * tt)) * (.7 + .3 * np.sin(2 * np.pi * .5 * tt))
@@ -489,12 +528,22 @@ def prep(C, work):
     put(S('impact'), .03, .8); put(S('whoosh'), .4, .6); put(S('whoosh'), T['Q'], .5)
     for i in range(4): put(S('pop'), T['OPT'] + i * T['GAP'], .8)
     put(S('pop'), T['PICK'], .9)
-    for s in range(3): put(S('beat'), T['CD'] + s); put(S('tick'), T['CD'] + s + .5, .7)
+    for s in range(3): put(S('beat'), T['CD'] + s * CDD); put(S('tick'), T['CD'] + s * CDD + CDD / 2, .7)
     put(S('whoosh'), T['REV'], .5); put(S('impact'), T['REV'] + .3, .7); put(S('chime'), T['REV'] + .35)
     put(S('whoosh'), T['EXP'] - .3, .6); put(S('pop'), T['EXP'] + 2.4, .6); put(S('pop'), T['EXP'] + 2.8, .6); put(S('whoosh'), T['EXP'] + 3.3, .5)
     for i in range(3): put(S('pop'), T['MN'] + .05 + i * .2, .9)
     put(S('impact'), T['MN'] + 2.0, .8)
     put(S('whoosh'), T['EN'], .5); put(S('pop'), T['EN'] + 1.65, .7)
+    # 5) subtle beat (110 bpm) under hook..countdown, drops out at reveal, softer return in explanation
+    bp = 60 / 110
+    kick = .5 * np.sin(2 * np.pi * np.cumsum(90 - 60 * np.arange(int(SR * .12)) / SR) / SR) * env(int(SR * .12), .002, .05)
+    hat = np.convolve(np.random.RandomState(9).randn(int(SR * .03)), [1, -1], 'same') * env(int(SR * .03), .001, .008) * .25
+    b = 0.0
+    while b < T['END'] - .6:
+        g = .55 if b < T['REV'] else (0 if b < T['EXP'] else .3)
+        if g: put(kick, b, g); put(hat, b + bp / 2, g)
+        b += bp
+    json.dump(lens, open(os.path.join(work, 'voice_lens.json'), 'w'))
     out = out / max(1e-6, np.abs(out).max()) * .9
     sf.write(os.path.join(work, 'audio.wav'), out.astype(np.float32), SR)
 
@@ -502,7 +551,7 @@ def render(C, work, a, b):
     b = min(b, int(T['END'] * FPS)); outp = os.path.join(work, f'chunk_{a:05d}.mp4')
     p = subprocess.Popen(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS), '-i', '-',
                           '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '18', '-pix_fmt', 'yuv420p', outp], stdin=subprocess.PIPE)
-    for fi in range(a, b): p.stdin.write(frame(fi / FPS, C).tobytes())
+    for fi in range(a, b): p.stdin.write(frame(fi / FPS, C, work).tobytes())
     p.stdin.close(); p.wait(); print('chunk', a, b)
 
 def final(C, work, outpath):
@@ -520,4 +569,4 @@ if __name__ == '__main__':
     elif mode == 'final': final(C, work, sys.argv[4])
     elif mode == 'still':
         os.makedirs(work, exist_ok=True)
-        for ts in sys.argv[4:]: frame(float(ts), C).save(os.path.join(work, f'still_{ts}.png'))
+        for ts in sys.argv[4:]: frame(float(ts), C, work).save(os.path.join(work, f'still_{ts}.png'))
