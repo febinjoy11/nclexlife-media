@@ -19,7 +19,7 @@ WHITE = (255, 255, 255); GREEN = (30, 175, 100); CARD = (21, 76, 86); DIM = (18,
 CORAL = (240, 110, 80); YELLOW = (255, 204, 77); SKIN = (236, 214, 196)
 
 # ---------- fixed retention timeline (seconds) ----------
-T = dict(Q=0.00, OPT=-0.25, GAP=0.20, PICK=3.60, CD=4.00, REV=6.40, EXP=8.60, MN=12.60, EN=15.40, END=18.60)
+T = dict(Q=0.00, OPT=-0.25, GAP=0.18, PICK=2.90, CD=3.20, REV=5.40, EXP=7.40, MN=10.80, EN=13.00, END=15.60)
 CDD = (T['REV'] - T['CD']) / 3
 
 _fc = {}
@@ -515,7 +515,10 @@ def prep(C, work):
     lens = {}
     out = np.zeros(int(SR * (T['END'] + .3)))
     def put(x, at, g=1.0):
-        i = int(at * SR); j = min(len(out), i + len(x)); out[i:j] += g * x[:j - i]
+        i = int(at * SR)
+        if i < 0: x = x[-i:]; i = 0
+        if i >= len(out) or len(x) == 0: return
+        j = min(len(out), i + len(x)); out[i:j] += g * x[:j - i]
     for key, (at, win, text) in C['voice'].items():
         a, sr = k.create(text, voice=C.get('voice_name', 'am_michael'), speed=C.get('voice_speed', 1.18), lang='en-us')
         raw = os.path.join(work, f'raw_{key}.wav'); fit = os.path.join(work, f'v_{key}.wav')
