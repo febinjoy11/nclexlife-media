@@ -1,0 +1,111 @@
+{
+ "topic": "Delegation",
+ "series_no": 24,
+ "hook": "CAN THE UAP DO THIS?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "Which task can the RN delegate to the **UAP?**",
+ "options_y": 520,
+ "options": [
+  "Teach a new insulin injection",
+  "Assess a client after a fall",
+  "Ambulate a stable post-op client",
+  "Evaluate pain after morphine"
+ ],
+ "correct": 2,
+ "answer_banner": "",
+ "answer_sub": "STABLE + ROUTINE = UAP",
+ "scene": "sort",
+ "sort_cols": [
+  "RN ONLY",
+  "UAP OK"
+ ],
+ "sort_colors": [
+  [
+   240,
+   110,
+   80
+  ],
+  [
+   30,
+   175,
+   100
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Teach\ninsulin",
+  "Assess\nafter fall",
+  "Ambulate\nstable client",
+  "Evaluate\npain relief"
+ ],
+ "sort_dest": [
+  0,
+  0,
+  1,
+  0
+ ],
+ "sort_why": [
+  "teach",
+  "assess",
+  "routine",
+  "evaluate"
+ ],
+ "explain_1": "Teach, assess, evaluate = **RN**.",
+ "explain_2": "Routine care, stable client = **UAP**.",
+ "next_tease": "Lisinopril: which sign is an **EMERGENCY?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Which task can the U A P do?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "C. Ambulate the stable client."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Teaching and assessing stay with you."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Routine tasks can go to them."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Remember EAT. The R N keeps it."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick C?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: a blood pressure med."
+  ]
+ },
+ "voice_name": "af_heart",
+ "mnemonic": {
+  "letters": [
+   "E",
+   "A",
+   "T"
+  ],
+  "words": [
+   "Evaluate",
+   "Assess",
+   "Teach"
+  ],
+  "tag": "RN KEEPS EAT",
+  "hl": -1
+ }
+}

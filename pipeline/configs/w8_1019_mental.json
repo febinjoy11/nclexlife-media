@@ -1,0 +1,100 @@
+{
+ "topic": "Mental health",
+ "series_no": 29,
+ "hook": "DISULFIRAM: AVOID WHAT?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "A client starts disulfiram. What must they **AVOID?**",
+ "options_y": 520,
+ "options": [
+  "Mouthwash with alcohol",
+  "Coffee",
+  "Aged cheese",
+  "Grapefruit juice"
+ ],
+ "correct": 0,
+ "answer_banner": "",
+ "answer_sub": "ANY ALCOHOL = REACTION",
+ "scene": "sort",
+ "sort_cols": [
+  "OK",
+  "AVOID"
+ ],
+ "sort_colors": [
+  [
+   30,
+   175,
+   100
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Alcohol\nmouthwash",
+  "Coffee",
+  "Aged\ncheese",
+  "Grapefruit\njuice"
+ ],
+ "sort_dest": [
+  1,
+  0,
+  0,
+  0
+ ],
+ "sort_why": [
+  "reaction",
+  "fine",
+  "MAOI rule",
+  "other drugs"
+ ],
+ "explain_1": "Even hidden alcohol **reacts**.",
+ "explain_2": "Mouthwash, sauces, hand rub: **check labels**.",
+ "principle": "Disulfiram: **NO** alcohol. Any form.",
+ "principle_sub": "Flushing, vomiting, fast heart rate",
+ "next_tease": "Who do you see **FIRST?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Disulfiram. What must they avoid?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "A. Alcohol mouthwash."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Even hidden alcohol counts."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Check mouthwash and sauces."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "No alcohol, in any form."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick A?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: who's first?"
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "brain"
+}

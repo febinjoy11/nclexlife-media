@@ -1,0 +1,101 @@
+{
+ "topic": "Pediatrics",
+ "series_no": 28,
+ "hook": "IRON FOR KIDS: WITH WHAT?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "Liquid iron for a child. Give it **WITH?**",
+ "options_y": 520,
+ "options": [
+  "A glass of milk",
+  "Orange juice, through a straw",
+  "An antacid",
+  "Right after a dairy snack"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "VITAMIN C HELPS ABSORPTION",
+ "scene": "sort",
+ "sort_cols": [
+  "AVOID",
+  "BEST"
+ ],
+ "sort_colors": [
+  [
+   240,
+   110,
+   80
+  ],
+  [
+   30,
+   175,
+   100
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Glass\nof milk",
+  "Orange juice\n+ straw",
+  "An\nantacid",
+  "Dairy\nsnack"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "blocks iron",
+  "absorbs best",
+  "blocks iron",
+  "blocks iron"
+ ],
+ "explain_1": "Milk and antacids **block** iron.",
+ "explain_2": "Vitamin C **helps**. Straw protects teeth.",
+ "principle": "Iron + **orange juice.**",
+ "principle_sub": "Use a straw to prevent tooth staining",
+ "next_tease": "Disulfiram: what must they **AVOID?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Liquid iron for a child. Give it with what?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. Orange juice."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Milk blocks the iron."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Vitamin C helps it absorb."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Iron goes with orange juice."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: disulfiram."
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "blood",
+ "theme_value": "Hgb 9.8"
+}

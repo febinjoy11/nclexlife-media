@@ -11,11 +11,13 @@ explanation > mnemonic > engage + next-question tease > loop.
 import sys, os, json, math, subprocess
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
+import themes8
 
 W, H, FPS, SR = 1080, 1920, 30, 48000
 FB = os.environ.get('NCLEX_FONT_BOLD', '/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf')
-BG = (11, 48, 56); DARK = (7, 34, 40); TEAL = (20, 125, 131); AQUA = (127, 224, 207); LIGHT = (216, 241, 236)
-WHITE = (255, 255, 255); GREEN = (30, 175, 100); CARD = (21, 76, 86); DIM = (18, 56, 63); DIMTXT = (95, 135, 140)
+BG = (70, 40, 160); DARK = (28, 16, 72); TEAL = (255, 70, 140); AQUA = (90, 230, 255); LIGHT = (240, 236, 255)
+WHITE = (255, 255, 255); GREEN = (0, 200, 120); CARD = (60, 45, 150); DIM = (88, 80, 130); DIMTXT = (190, 185, 215)
+OPTC = [(255, 85, 99), (50, 130, 255), (255, 170, 20), (160, 90, 235)]
 CORAL = (240, 110, 80); YELLOW = (255, 204, 77); SKIN = (236, 214, 196)
 
 # ---------- fixed retention timeline (seconds) ----------
@@ -43,19 +45,39 @@ _base = np.stack([np.full_like(_xs, c) for c in BG], -1) + (_ys / (H // 4))[...,
 _R = np.random.RandomState(7)
 BGP = [(_R.rand() * W, _R.rand() * H, 2 + _R.rand() * 5, _R.rand() * 6.28, 8 + _R.rand() * 16) for _ in range(46)]
 
-def background(t, dark=0.0):
-    img = _base.copy()
-    for cx, cy, r, amp in [(W / 8 + 50 * math.sin(t * .6), H / 7 + 40 * math.cos(t * .5), 160, .5),
-                           (W / 5 + 40 * math.cos(t * .4), H / 5 + 50 * math.sin(t * .35), 140, .28)]:
-        g = np.exp(-((_xs - cx) ** 2 + (_ys - cy) ** 2) / (2 * r * r))[..., None]
-        img += g * amp * (np.array(TEAL, np.float32) - img)
+def background(t, dark=0.0, doodle=True):
+    top = np.array([110 + 30 * math.sin(t * .4), 50, 220], np.float32)
+    bot = np.array([255, 70 + 25 * math.sin(t * .5 + 1), 150], np.float32)
+    g = (_ys / (H // 4))[..., None]
+    wave = (0.08 * np.sin(_xs / 18 + t * 1.2))[..., None]
+    img = top * (1 - g - wave) + bot * (g + wave)
     img *= (1 - 0.35 * dark)
     im = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).resize((W, H), Image.BILINEAR)
     d = ImageDraw.Draw(im)
-    for x, y, r, ph, sp in BGP:  # slow floating airborne particles
-        px = (x + 22 * math.sin(t * .7 + ph)) % W; py = (y - t * sp) % H
-        d.ellipse((px - r, py - r, px + r, py + r), fill=mix(BG, AQUA, (0.16 + 0.08 * math.sin(t + ph)) * (1 - .4 * dark)))
+    cols = [(255, 255, 255), (255, 220, 80), (90, 230, 255), (255, 150, 200)]
+    for n, (x, y, r, ph, sp) in enumerate(BGP):
+        px = (x + 26 * math.sin(t * .8 + ph)) % W; py = (y - t * sp * 1.5) % H
+        c = cols[n % 4]; a = (.28 + .12 * math.sin(t * 2 + ph)) * (1 - .4 * dark)
+        bgc = tuple(int(v) for v in img[min(H // 4 - 1, int(py) // 4), min(W // 4 - 1, int(px) // 4)])
+        d.ellipse((px - r, py - r, px + r, py + r), fill=mix(bgc, c, a))
+    if doodle: doodles(d, t, img, dark)
     return im, d
+
+def doodles(d, t, img, dark):
+    items = [(150, 1180, 'heart'), (930, 1250, 'pill'), (880, 300, 'cross'), (120, 520, 'drop'), (960, 760, 'heart'), (200, 1500, 'cross'), (930, 1560, 'drop')]
+    for i, (x, y, kind) in enumerate(items):
+        yy = y + 18 * math.sin(t * 1.3 + i); s = 1 + .08 * math.sin(t * 2 + i)
+        bgc = tuple(int(v) for v in img[min(H // 4 - 1, int(yy) // 4), min(W // 4 - 1, int(x) // 4)])
+        c = mix(bgc, (255, 255, 255), .22 * (1 - .5 * dark))
+        if kind == 'heart':
+            pts = [(x + 16 * math.sin(a) ** 3 * 3 * s, yy - (13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a)) * 3 * s) for a in [k * 2 * math.pi / 40 for k in range(40)]]
+            d.polygon(pts, fill=c)
+        elif kind == 'pill':
+            d.rounded_rectangle((x - 60 * s, yy - 26 * s, x + 60 * s, yy + 26 * s), radius=int(26 * s), fill=c)
+        elif kind == 'cross':
+            d.rectangle((x - 16 * s, yy - 50 * s, x + 16 * s, yy + 50 * s), fill=c); d.rectangle((x - 50 * s, yy - 16 * s, x + 50 * s, yy + 16 * s), fill=c)
+        else:
+            d.ellipse((x - 30 * s, yy - 10 * s, x + 30 * s, yy + 50 * s), fill=c); d.polygon([(x - 28 * s, yy + 10 * s), (x + 28 * s, yy + 10 * s), (x, yy - 50 * s)], fill=c)
 
 # ---------- text ----------
 def parse(text):
@@ -94,10 +116,12 @@ def kinetic(d, placed, f, t, t0, stag=0.05, a=1.0, dy=0.0, col=WHITE, hl=AQUA, h
                     d.rounded_rectangle((x - 14, yy - 8, x - 14 + (ww + 28) * hp, yy + f.size * 1.2), radius=14, fill=mix(BG, hl, .35 * a * p * gl))
                 d.rounded_rectangle((x - 8, yy - 3, x - 8 + (ww + 16) * hp, yy + f.size * 1.1), radius=10, fill=mix(BG, hl, a * p))
             c = mix(col, hltxt, hp)
+        if p * a > .3: d.text((x + 4, yy + 4), w, font=f, fill=DARK)
         d.text((x, yy), w, font=f, fill=mix(BG, c, p * a))
 
 def ctext(d, s, cx, cy, size, col, a=1.0, sc=1.0):
     if a <= 0.02: return
+    if a > .3: d.text((cx + 3, cy + 3), s, font=font(size * sc), fill=DARK, anchor='mm')
     d.text((cx, cy), s, font=font(size * sc), fill=mix(BG, col, a), anchor='mm')
 
 def check(d, cx, cy, s, p, col=WHITE, w=10):
@@ -121,7 +145,7 @@ def option_card(d, i, text, cx, cy, sc, fill, txt, circ, a=1.0):
     d.rounded_rectangle((x0, y0, x0 + w, y0 + h), radius=int(30 * sc), fill=mix(BG, fill, a))
     r = 44 * sc; ccx = x0 + 70 * sc
     d.ellipse((ccx - r, cy - r, ccx + r, cy + r), fill=mix(BG, circ, a))
-    d.text((ccx, cy), 'ABCD'[i], font=font(46 * sc), fill=mix(BG, WHITE, a), anchor='mm')
+    d.text((ccx, cy), 'ABCD'[i], font=font(46 * sc), fill=mix(BG, fill if circ == WHITE else WHITE, a), anchor='mm')
     maxw = w - 250 * sc
     for fs in (52, 46, 42):
         f = font(fs * sc); lines = wrap(text, f, maxw)
@@ -320,21 +344,21 @@ def mnemonic(d, t, C):
         f = font(92); pl = lay(parse(C.get('principle', '')), f, 70, 620, 940, 112, center=True)
         kinetic(d, pl, f, t, T['MN'] + .1, stag=.09, a=A, hl=CORAL, hltxt=WHITE)
         p = eo(prog(u, 1.6, .35))
-        if p > 0: ctext(d, C.get('principle_sub', ''), 540, 1160 + (1 - p) * 30, 50, AQUA, p * A)
+        if p > 0: ctext(d, C.get('principle_sub', ''), 540, 1160 + (1 - p) * 30, 50, WHITE, p * A)
         return
-    n = len(m['letters']); move = eio(prog(u, .95, .45))
+    n = len(m['letters']); move = eio(prog(u, .55, .4))
     for i, L in enumerate(m['letters']):
         sc, a = punch(t, T['MN'] + .05 + i * .2, .22, 1.8)
         x = lerp(540 + (i - (n - 1) / 2) * 260, 170, move); y = lerp(820, 560 + i * 200, move)
         size = lerp(250, 140, move) * sc
         ctext(d, L, x, y, size, AQUA, a * A)
-        wp = eo(prog(u, 1.3 + i * .18, .3))
+        wp = eo(prog(u, .75 + i * .12, .25))
         if wp > 0:
-            d.text((270 + (1 - wp) * 80, y), m['words'][i], font=font(88), fill=mix(BG, WHITE, wp * A), anchor='lm')
-    sc, a = punch(t, T['MN'] + 2.0, .22, 1.7)
+            d.text((270 + (1 - wp) * 80, y), m['words'][i], font=font(88), fill=mix(BG, (255, 220, 80) if i == m.get('hl', -1) else WHITE, wp * A), anchor='lm')
+    sc, a = punch(t, T['MN'] + 1.25, .22, 1.7)
     if a > 0:
         f = font(96 * sc); tw = f.getlength(m['tag'])
-        shake = 6 * math.sin(u * 90) * (1 - prog(u, 2.0, .25))
+        shake = 6 * math.sin(u * 90) * (1 - prog(u, 1.25, .25))
         ty = max(1230, 560 + n * 200 + 60)
         d.rounded_rectangle((540 - tw / 2 - 40 + shake, ty - 70 * sc, 540 + tw / 2 + 40 + shake, ty + 70 * sc), radius=int(30 * sc), fill=mix(BG, AQUA, a * A))
         d.text((540 + shake, ty), m['tag'], font=f, fill=mix(BG, DARK, a * A), anchor='mm')
@@ -384,11 +408,75 @@ def captions(d, t, C, work):
             cur = start + j == i
             d.text((x, y), w, font=f, fill=YELLOW if cur else WHITE, anchor='lm'); x += f.getlength(w) + sp
 
+
+# ---------- topic background themes ----------
+def _heart_poly(cx, cy, s):
+    pts = []
+    for k in range(80):
+        a = 2 * math.pi * k / 80
+        x = 16 * math.sin(a) ** 3
+        y = 13 * math.cos(a) - 5 * math.cos(2 * a) - 2 * math.cos(3 * a) - math.cos(4 * a)
+        pts.append((cx + x * s, cy - y * s))
+    return pts
+
+ECG_ST = [(0, 0), (.18, 0), (.22, -.12), (.26, 0), (.30, 0), (.33, .18), (.36, -1.0), (.39, .30), (.42, -.28), (.50, -.30), (.58, -.42), (.64, 0), (1, 0)]  # ST elevation look
+
+def theme_cardiac(d, t, dark):
+    k = 1 - .4 * dark
+    # faint ECG paper grid
+    gc = mix(BG, AQUA, .045 * k)
+    for x in range(0, W, 72): d.line((x, 140, x, H), fill=gc, width=1)
+    for y in range(140, H, 72): d.line((0, y, W, y), fill=gc, width=1)
+    # pulsing heart (beats ~ every 0.75 s)
+    ph = (t % .75) / .75
+    beat = 1 + .06 * math.exp(-ph * 9) + .03 * math.exp(-max(0, ph - .18) * 12) * (ph > .18)
+    hp = _heart_poly(560, 1010, 26 * beat)
+    d.polygon(hp, fill=mix(BG, CORAL, .10 * k))
+    d.line(hp + [hp[0]], fill=mix(BG, CORAL, .22 * k), width=6, joint='curve')
+    # sweeping monitor trace across the lower band
+    y0, amp, per = 1470, 70, 420
+    head = (t * 520) % (W + 200) - 100
+    pts = []
+    for x in range(-20, int(head) + 1, 6):
+        u = ((x + 40) % per) / per
+        for i in range(len(ECG_ST) - 1):
+            (a1, b1), (a2, b2) = ECG_ST[i], ECG_ST[i + 1]
+            if a1 <= u <= a2:
+                yy = b1 + (b2 - b1) * (u - a1) / (a2 - a1 + 1e-9); break
+        pts.append((x, y0 + yy * amp))
+    if len(pts) > 2:
+        n = len(pts); seg = max(2, n // 6)
+        for j in range(0, n - 1, seg):
+            fade = (j + seg) / n
+            d.line(pts[j:j + seg + 1], fill=mix(BG, GREEN, (.12 + .33 * fade) * k), width=5, joint='curve')
+        hx, hy = pts[-1]
+        d.ellipse((hx - 9, hy - 9, hx + 9, hy + 9), fill=mix(BG, GREEN, .7 * k))
+    # small monitor readout
+    d.text((1010, 1395), 'HR 112', font=font(34), fill=mix(BG, GREEN, .45 * k), anchor='rm')
+
+THEMES = {'cardiac': theme_cardiac}
+
+
+_CF = [(np.random.RandomState(50 + i).uniform(-1, 1), np.random.RandomState(150 + i).uniform(-1.6, -.4), i % 5) for i in range(110)]
+def confetti(d, t, x0, y0):
+    u = t - (T['REV'] + .35)
+    if not (0 < u < 1.6): return
+    cols = [(255, 220, 80), (90, 230, 255), (255, 90, 140), (0, 220, 140), (255, 255, 255)]
+    for vx, vy, c in _CF:
+        x = x0 + vx * 1300 * u; y = y0 + vy * 1300 * u + 1500 * u * u
+        a = 1 - (u / 1.6) ** 2; sz = 14; rot = math.sin(u * 12 + vx * 9)
+        d.rectangle((x - sz, y - sz * abs(rot) / 2 - 2, x + sz, y + sz * abs(rot) / 2 + 2), fill=mix(BG, cols[c], a))
+
 # ---------- frame ----------
 def frame(t, C, work=None):
     OY = C.get('options_y', CY0); PY = OY + 3 * CGAP + 180
     dark = eo(prog(t, T['CD'] - .3, .4)) * (1 - eo(prog(t, T['REV'], .3)))
-    im, d = background(t, dark)
+    th = C.get('bg_theme')
+    im, d = background(t, dark, doodle=th not in themes8.THEMES)
+    if th in themes8.THEMES:
+        im = im.convert('RGBA'); ov = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+        themes8.THEMES[th](ImageDraw.Draw(ov), t, 1 - .45 * dark, C)
+        im.alpha_composite(ov); im = im.convert('RGB'); d = ImageDraw.Draw(im)
     d.rectangle((0, 0, W, 9), fill=mix(BG, AQUA, .2)); d.rectangle((0, 0, W * min(1, t / T['END']), 9), fill=AQUA)
     chip = f"NCLEX  ·  {C['topic'].upper()}"; f = font(30); cw = f.getlength(chip) + 56
     d.rounded_rectangle((60, 60, 60 + cw, 112), radius=26, fill=TEAL); d.text((88, 71), chip, font=f, fill=WHITE)
@@ -409,8 +497,15 @@ def frame(t, C, work=None):
     # QUESTION
     if T['Q'] <= t < T['EXP'] + .1:
         out = eio(prog(t, T['EXP'] - .35, .35))
-        fq = font(66)
-        kinetic(d, lay(parse(C['question']), fq, 70, 250, 930, 80), fq, t, T['Q'] - 1.0, stag=.0, a=1 - out, dy=-out * 150)
+        fq = font(66); hk = C.get('hook'); q0 = .85 if hk else T['Q'] - 1.0
+        if hk and t < 1.15:
+            ho = eio(prog(t, .8, .3)); sc, ha = punch(t, -.25, .25, 1.35)
+            fh = font(96 * sc); lines = wrap(hk, font(96), 940)
+            for j, l in enumerate(lines):
+                y = 300 + (j - (len(lines) - 1) / 2) * 112 - ho * 120
+                d.text((544, y + 5), l, font=fh, fill=DARK, anchor='mm')
+                d.text((540, y), l, font=fh, fill=mix(BG, YELLOW, ha * (1 - ho)), anchor='mm')
+        kinetic(d, lay(parse(C['question']), fq, 70, 250, 930, 80), fq, t, q0, stag=.03 if hk else .0, a=1 - out, dy=-out * 150)
     # OPTIONS
     if T['OPT'] <= t < T['EXP'] + .1:
         out = eio(prog(t, T['EXP'] - .35, .35))
@@ -424,13 +519,13 @@ def frame(t, C, work=None):
             cy = OY + i * CGAP + 2.5 * math.sin(t * 2.2 + i * 1.7) * prog(t, T['OPT'] + 2, .5)
             cy = (OY + 1.5 * CGAP) + (cy - (OY + 1.5 * CGAP)) * zoom
             ok = i == C['correct']
-            sc, fill, txt, circ = zoom, CARD, WHITE, TEAL
-            if T['PICK'] <= t < T['REV']: fill = mix(CARD, TEAL, .12 + .12 * math.sin(t * 5 + i))
+            sc, fill, txt, circ = zoom, OPTC[i], WHITE, WHITE
+            if T['PICK'] <= t < T['REV']: fill = mix(OPTC[i], WHITE, .10 + .10 * math.sin(t * 5 + i))
             if rev > 0:
                 if ok:
-                    sc = lerp(zoom, 1.07, win); fill = mix(CARD, GREEN, win); circ = mix(TEAL, (18, 120, 70), win); cx += 14 * win
+                    sc = lerp(zoom, 1.09, win); fill = mix(OPTC[i], GREEN, win); circ = WHITE; cx += 14 * win
                 else:
-                    sc = lerp(zoom, .93, eo(rev)); fill = mix(CARD, DIM, eo(rev)); txt = mix(WHITE, DIMTXT, eo(rev)); circ = mix(TEAL, (35, 75, 82), eo(rev)); cx -= 22 * eo(rev)
+                    sc = lerp(zoom, .92, eo(rev)); fill = mix(OPTC[i], DIM, eo(rev)); txt = mix(WHITE, DIMTXT, eo(rev)); circ = mix(WHITE, (120, 112, 160), eo(rev)); cx -= 22 * eo(rev)
             if rev > 0 and ok and win > 0:
                 gw = 10 + 6 * math.sin(t * 8)
                 d.rounded_rectangle((cx - CW * sc / 2 - gw, cy - CH * sc / 2 - gw, cx + CW * sc / 2 + gw, cy + CH * sc / 2 + gw), radius=40, fill=mix(BG, GREEN, .35 * win * (1 - out)))
@@ -442,6 +537,7 @@ def frame(t, C, work=None):
                 if ba > 0: d.ellipse((bx - br, by - br, bx + br, by + br), outline=mix(BG, WHITE, ba), width=6)
                 d.ellipse((bx - 56, by - 56, bx + 56, by + 56), fill=mix(BG, WHITE, cp * (1 - out)))
                 check(d, bx, by + 2, 62, cp * (1 - out), col=GREEN, w=12)
+                confetti(d, t, cx, by)
     # PICK ONE + COUNTDOWN
     if T['PICK'] <= t < T['REV'] + .3:
         a = eo(prog(t, T['PICK'], .2)) * (1 - prog(t, T['REV'], .25))
@@ -535,7 +631,7 @@ def prep(C, work):
     put(S('whoosh'), T['REV'], .5); put(S('impact'), T['REV'] + .3, .7); put(S('chime'), T['REV'] + .35)
     put(S('whoosh'), T['EXP'] - .3, .6); put(S('pop'), T['EXP'] + 2.4, .6); put(S('pop'), T['EXP'] + 2.8, .6); put(S('whoosh'), T['EXP'] + 3.3, .5)
     for i in range(3): put(S('pop'), T['MN'] + .05 + i * .2, .9)
-    put(S('impact'), T['MN'] + 2.0, .8)
+    put(S('impact'), T['MN'] + 1.25, .8)
     put(S('whoosh'), T['EN'], .5); put(S('pop'), T['EN'] + 1.65, .7)
     # 5) subtle beat (110 bpm) under hook..countdown, drops out at reveal, softer return in explanation
     bp = 60 / 110

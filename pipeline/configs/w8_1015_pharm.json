@@ -1,0 +1,112 @@
+{
+ "topic": "Pharmacology",
+ "series_no": 25,
+ "hook": "LISINOPRIL EMERGENCY?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "On lisinopril. Which finding is an **EMERGENCY?**",
+ "options_y": 520,
+ "options": [
+  "Dry, nagging cough",
+  "Swollen lips and tongue",
+  "Dizzy when standing up",
+  "Potassium 4.8 mEq/L"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "SWOLLEN TONGUE = AIRWAY RISK",
+ "scene": "sort",
+ "sort_cols": [
+  "EXPECTED",
+  "EMERGENCY"
+ ],
+ "sort_colors": [
+  [
+   127,
+   224,
+   207
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Dry\ncough",
+  "Swollen lips\n+ tongue",
+  "Dizzy when\nstanding",
+  "K+ 4.8"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "report",
+  "angioedema",
+  "rise slowly",
+  "normal"
+ ],
+ "explain_1": "Cough and dizziness are **common**.",
+ "explain_2": "Swelling of lips + tongue = **angioedema**.",
+ "next_tease": "Chills during a **TRANSFUSION?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "On lisinopril. Which sign is an emergency?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. Swollen lips and tongue."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Cough is common."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Swelling can block the airway."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Angioedema, cough, high potassium."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: a blood transfusion."
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "pills",
+ "mnemonic": {
+  "letters": [
+   "A",
+   "C",
+   "E"
+  ],
+  "words": [
+   "Angioedema",
+   "Cough",
+   "Elevated K+"
+  ],
+  "tag": "A = AIRWAY RISK",
+  "hl": 0
+ }
+}

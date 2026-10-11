@@ -1,0 +1,101 @@
+{
+ "topic": "Maternity",
+ "series_no": 27,
+ "hook": "CORD PROLAPSE: NOW WHAT?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "You see the umbilical cord at the vagina. **FIRST?**",
+ "options_y": 520,
+ "options": [
+  "Push the cord back in",
+  "Lift the presenting part off the cord",
+  "Start oxytocin",
+  "Have the client walk"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "TAKE PRESSURE OFF THE CORD",
+ "scene": "sort",
+ "sort_cols": [
+  "NEVER",
+  "FIRST"
+ ],
+ "sort_colors": [
+  [
+   240,
+   110,
+   80
+  ],
+  [
+   30,
+   175,
+   100
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Push cord\nback in",
+  "Lift part\noff cord",
+  "Start\noxytocin",
+  "Walk\naround"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "never",
+  "relieves cord",
+  "worse",
+  "worse"
+ ],
+ "explain_1": "Never push the cord **back in**.",
+ "explain_2": "Lift the baby's head **off** the cord.",
+ "principle": "Cord out? Lift the **head off.**",
+ "principle_sub": "Knee-chest position, call for help",
+ "next_tease": "Iron for a child: give it **WITH?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "You see the cord. What do you do first?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. Lift the presenting part."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Never push it back in."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Take the pressure off the cord."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Lift the head off the cord."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: iron for kids."
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "cardiac",
+ "theme_value": "FHR 90"
+}

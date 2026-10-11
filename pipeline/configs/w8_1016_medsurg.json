@@ -1,0 +1,101 @@
+{
+ "topic": "Med-surg",
+ "series_no": 26,
+ "hook": "CHILLS DURING BLOOD?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "Blood transfusion: chills + back pain. **FIRST?**",
+ "options_y": 520,
+ "options": [
+  "Slow the transfusion rate",
+  "Stop the transfusion",
+  "Give acetaminophen",
+  "Recheck vitals in 15 min"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "REACTION? STOP THE BLOOD",
+ "scene": "sort",
+ "sort_cols": [
+  "NOT FIRST",
+  "FIRST"
+ ],
+ "sort_colors": [
+  [
+   127,
+   224,
+   207
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Slow\nthe rate",
+  "Stop the\ntransfusion",
+  "Give\nacetaminophen",
+  "Recheck\nin 15 min"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "still infusing",
+  "stop first",
+  "not first",
+  "too late"
+ ],
+ "explain_1": "Slowing still gives **more blood**.",
+ "explain_2": "Stop it, then **saline** + call.",
+ "principle": "Reaction? **STOP** the blood.",
+ "principle_sub": "Then saline + call the provider",
+ "next_tease": "Prolapsed cord: what do you **DO?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Chills and back pain during blood. What's first?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. Stop the transfusion."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Slowing still gives more blood."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Stop it, then saline, then call."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Reaction? Stop the blood."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: a prolapsed cord."
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "blood",
+ "theme_value": "PRBC"
+}

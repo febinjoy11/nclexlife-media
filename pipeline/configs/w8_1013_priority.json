@@ -1,0 +1,116 @@
+{
+ "topic": "Prioritization",
+ "series_no": 23,
+ "hook": "WHO DO YOU SEE FIRST?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "Which client should the nurse see **FIRST?**",
+ "options_y": 520,
+ "options": [
+  "Hip replacement, pain 6/10",
+  "New slurred speech + face droop",
+  "COPD, SpO\u2082 90%",
+  "Glucose 190 mg/dL, eating"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "POSSIBLE STROKE: TIME = BRAIN",
+ "scene": "sort",
+ "sort_cols": [
+  "CAN WAIT",
+  "FIRST"
+ ],
+ "sort_colors": [
+  [
+   127,
+   224,
+   207
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Hip replacement\npain 6/10",
+  "Slurred speech\nface droop",
+  "COPD\nSpO\u2082 90%",
+  "Glucose 190\neating"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "treat soon",
+  "possible stroke",
+  "expected",
+  "monitor"
+ ],
+ "explain_1": "Pain, COPD sats, glucose can **wait**.",
+ "explain_2": "New neuro signs = possible **stroke**.",
+ "principle": "Time = **brain.**",
+ "principle_sub": "New stroke signs: see them first",
+ "next_tease": "Can the UAP do **this?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Four clients. Who do you see first?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. Slurred speech."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "The others can wait."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "This could be a stroke."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "F A S T. Time matters."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: delegation."
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "brain",
+ "mnemonic": {
+  "letters": [
+   "F",
+   "A",
+   "S",
+   "T"
+  ],
+  "words": [
+   "Face",
+   "Arms",
+   "Speech",
+   "Time"
+  ],
+  "tag": "TIME = BRAIN",
+  "hl": 3
+ }
+}
