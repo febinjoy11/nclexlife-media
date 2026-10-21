@@ -1,0 +1,100 @@
+{
+ "topic": "Med-surg",
+ "series_no": 40,
+ "hook": "CHEST TUBE DISCONNECTS?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "Chest tube disconnects from the drainage. **FIRST?**",
+ "options_y": 520,
+ "options": [
+  "Clamp it for an hour",
+  "Put the end in sterile water",
+  "Call the provider",
+  "Pull the chest tube out"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "RESTORE THE WATER SEAL",
+ "scene": "sort",
+ "sort_cols": [
+  "NOT FIRST",
+  "FIRST"
+ ],
+ "sort_colors": [
+  [
+   30,
+   175,
+   100
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Clamp\n1 hour",
+  "Sterile\nwater",
+  "Call\nprovider",
+  "Pull\ntube"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "tension risk",
+  "water seal",
+  "after",
+  "never"
+ ],
+ "explain_1": "Sterile water **restores the seal**.",
+ "explain_2": "Long clamping risks **tension pneumo**.",
+ "principle": "Disconnected? **Water seal** first.",
+ "principle_sub": "Keep sterile water at the bedside",
+ "next_tease": "Who do you see **FIRST?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Chest tube disconnects. First?"
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. Sterile water."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "It restores the water seal."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "Clamping risks tension."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Water seal first."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: who's first?"
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "lungs"
+}

@@ -1,0 +1,100 @@
+{
+ "topic": "Pharmacology",
+ "series_no": 39,
+ "hook": "SILDENAFIL + CHEST PAIN?",
+ "hook_lines": [
+  "",
+  ""
+ ],
+ "question": "Chest pain after sildenafil. Which do you **HOLD?**",
+ "options_y": 520,
+ "options": [
+  "Chewable aspirin",
+  "Sublingual nitroglycerin",
+  "12-lead ECG",
+  "Oxygen for SpO2 89%"
+ ],
+ "correct": 1,
+ "answer_banner": "",
+ "answer_sub": "SEVERE BP DROP RISK",
+ "scene": "sort",
+ "sort_cols": [
+  "GIVE",
+  "HOLD"
+ ],
+ "sort_colors": [
+  [
+   30,
+   175,
+   100
+  ],
+  [
+   240,
+   110,
+   80
+  ]
+ ],
+ "sort_hl": 1,
+ "chips": [
+  "Aspirin",
+  "Nitro\nSL",
+  "12-lead\nECG",
+  "Oxygen"
+ ],
+ "sort_dest": [
+  0,
+  1,
+  0,
+  0
+ ],
+ "sort_why": [
+  "ACS care",
+  "BP crash",
+  "right away",
+  "SpO2 89%"
+ ],
+ "explain_1": "Sildenafil + nitro = **severe BP drop**.",
+ "explain_2": "No nitrates within **24 h** of sildenafil.",
+ "principle": "Ask about **ED meds** before nitro.",
+ "principle_sub": "Sildenafil 24 h \u00b7 Tadalafil 48 h",
+ "next_tease": "Med-surg: what's **FIRST?**",
+ "voice": {
+  "question": [
+   0.0,
+   3.0,
+   "Took sildenafil. Now chest pain."
+  ],
+  "reveal": [
+   5.75,
+   1.5,
+   "B. The nitroglycerin."
+  ],
+  "exp1": [
+   7.6,
+   1.6,
+   "Together, BP can crash."
+  ],
+  "exp2": [
+   9.2,
+   1.5,
+   "No nitro for a day."
+  ],
+  "mnemonic": [
+   10.9,
+   2.0,
+   "Ask about ED meds first."
+  ],
+  "engage": [
+   13.1,
+   1.0,
+   "Did you pick B?"
+  ],
+  "next": [
+   14.15,
+   1.3,
+   "Next: what's first?"
+  ]
+ },
+ "voice_name": "af_heart",
+ "bg_theme": "cardiac"
+}
